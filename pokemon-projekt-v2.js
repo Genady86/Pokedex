@@ -52,6 +52,16 @@ function renderPokemonCards() {
     }
 }
 
+function getPokemonTypes(pokemon) {
+    let pokemonTypes = '';
+
+    for (let i = 0; i < pokemon.types.length; i++) {
+        pokemonTypes += pokemon.types[i].type.name + ' ';
+    }
+
+    return pokemonTypes;
+}
+
 function getPokemonCardTemplate(pokemon) {
     const backgroundColor = getTypeBackgroundColor(pokemon);
 
@@ -65,7 +75,7 @@ function getPokemonCardTemplate(pokemon) {
             >
                 <h2>${pokemon.name}</h2>
                 <p>#${pokemon.id}</p>
-                <p>${pokemon.types[0].type.name}</p>
+                <p>${getPokemonTypes(pokemon)}</p>
 
                 <img
                     src="${pokemon.sprites.front_default}"
