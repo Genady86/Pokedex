@@ -3,15 +3,27 @@ function getTypeBackgroundColor(pokemon) {
     return TYPE_COLORS[type] || '#F5F5F5';
 }
 
+function showLoadingSpinner() {
+    document.getElementById('loading-spinner').classList.remove('d-none');
+}
+
+function hideLoadingSpinner() {
+    document.getElementById('loading-spinner').classList.add('d-none');
+}
+
+async function fetchPokemonList() {
+    const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
 async function loadPokemonList() {
     showLoadingSpinner();
 
     try {
-        const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
-        const response = await fetch(url);
-        const data = await response.json();
-
+        const data = await fetchPokemonList();
         await loadPokemonDetails(data.results);
+        offset += limit;
         renderPokemonCards();
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
@@ -31,7 +43,6 @@ async function loadPokemonDetails(pokemonList) {
 
 function renderPokemonCards() {
     const container = document.getElementById('pokemon-container');
-
     container.innerHTML = '';
 
     for (let i = 0; i < allPokemon.length; i++) {
@@ -64,12 +75,8 @@ function getPokemonCardTemplate(pokemon) {
     `;
 }
 
-function showLoadingSpinner() {
-    document.getElementById('loading-spinner').classList.remove('d-none');
-}
+const loadMoreButton = document.getElementById('load-more-button');
 
-function hideLoadingSpinner() {
-    document.getElementById('loading-spinner').classList.add('d-none');
-}
+loadMoreButton.addEventListener('click', loadPokemonList);
 
 loadPokemonList();
