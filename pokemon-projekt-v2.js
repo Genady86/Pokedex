@@ -4,6 +4,8 @@ function getTypeBackgroundColor(pokemon) {
 }
 
 async function loadPokemonList() {
+    showLoadingSpinner();
+
     try {
         const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
         const response = await fetch(url);
@@ -14,6 +16,8 @@ async function loadPokemonList() {
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
     }
+
+    hideLoadingSpinner();
 }
 
 async function loadPokemonDetails(pokemonList) {
@@ -58,6 +62,14 @@ function getPokemonCardTemplate(pokemon) {
             </button>
         </li>
     `;
+}
+
+function showLoadingSpinner() {
+    document.getElementById('loading-spinner').classList.remove('d-none');
+}
+
+function hideLoadingSpinner() {
+    document.getElementById('loading-spinner').classList.add('d-none');
 }
 
 loadPokemonList();
