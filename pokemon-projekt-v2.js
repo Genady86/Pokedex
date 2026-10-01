@@ -1,17 +1,63 @@
-async function loadOnePokemon() {
+function getTypeBackgroundColor(pokemon) {
+    const type = pokemon.types[0].type.name;
+    return TYPE_COLORS[type] || '#F5F5F5';
+}
+
+async function loadPokemonList() {
     try {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+        const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
+        const response = await fetch(url);
+        const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-        }
-
-        const pokemon = await response.json();
-
-        console.log(pokemon);
+        await loadPokemonDetails(data.results);
+        renderPokemonCards();
     } catch (error) {
-        console.error('Pokémon konnte nicht geladen werden:', error);
+        console.error('Pokemon could not be loaded:', error);
     }
 }
 
-loadOnePokemon();
+async function loadPokemonDetails(pokemonList) {
+    for (let i = 0; i < pokemonList.length; i++) {
+        const response = await fetch(pokemonList[i].url);
+        const pokemon = await response.json();
+
+        allPokemon.push(pokemon);
+    }
+}
+
+function renderPokemonCards() {
+    const container = document.getElementById('pokemon-container');
+
+    container.innerHTML = '';
+
+    for (let i = 0; i < allPokemon.length; i++) {
+        container.innerHTML += getPokemonCardTemplate(allPokemon[i]);
+    }
+}
+
+function getPokemonCardTemplate(pokemon) {
+    const backgroundColor = getTypeBackgroundColor(pokemon);
+
+    return `
+        <li>
+            <button
+                class="pokemon-card"
+                data-id="card"
+                style="background-color: ${backgroundColor}"
+                aria-label="Open ${pokemon.name}"
+            >
+                <h2>${pokemon.name}</h2>
+                <p>#${pokemon.id}</p>
+                <p>${pokemon.types[0].type.name}</p>
+
+                <img
+                    src="${pokemon.sprites.front_default}"
+                    alt="${pokemon.name}"
+                    data-id="card-image"
+                >
+            </button>
+        </li>
+    `;
+}
+
+loadPokemonList();

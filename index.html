@@ -1,27 +1,35 @@
-<!DOCTYPE html>
-<html lang="de">
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
-    <link rel="stylesheet" href="pokemon-styles-v2.css">
-</head>
+        <title>Pokedex</title>
 
-<body>
+        <link rel="icon" href="./assets/img/favicon.ico" />
+        <link rel="stylesheet" href="pokemon-styles-v2.css" />
+    </head>
 
-    <header>
-        <h1>Pokedex</h1>
-        <input id="search-input" type="search" placeholder="Pokémon suchen ..." autocomplete="off">
-    </header>
+    <body>
+        <header>
+            <h1>Pokedex</h1>
 
-    <main>
-        <div id="loading-spinner" class="d-none">Pokémon werden geladen ...</div>
-        <section id="pokemon-container"></section>
-    </main>
+            <input
+                id="search-input"
+                data-id="search-input"
+                type="search"
+                placeholder="Search Pokémon..."
+                autocomplete="off"
+            />
+        </header>
 
-    <script src="pokemon-projekt-v2.js"></script>
+        <main data-id="content">
+            <div id="loading-spinner" class="d-none">Pokémon are loading...</div>
 
-</body>
+            <ul id="pokemon-container" class="pokemon-container"></ul>
+        </main>
 
+        <script src="global-var.js"></script>
+        <script src="pokemon-projekt-v2.js"></script>
+    </body>
 </html>

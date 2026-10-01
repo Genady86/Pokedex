@@ -1,16 +1,27 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
-
-header {
-    padding: 20px;
-}
-
-main {
-    padding: 20px;
-}
-
 .d-none {
     display: none;
+}
+
+.pokemon-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    padding: 20px;
+}
+
+.pokemon-card {
+    width: 200px;
+    padding: 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.pokemon-card h2 {
+    text-transform: capitalize;
+}
+
+.pokemon-card img {
+    width: 120px;
 }
