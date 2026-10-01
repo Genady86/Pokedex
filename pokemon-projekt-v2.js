@@ -19,6 +19,7 @@ async function fetchPokemonList() {
 
 async function loadPokemonList() {
     showLoadingSpinner();
+    loadMoreButton.disabled = true;
 
     try {
         const data = await fetchPokemonList();
@@ -30,6 +31,7 @@ async function loadPokemonList() {
     }
 
     hideLoadingSpinner();
+    loadMoreButton.disabled = false;
 }
 
 async function loadPokemonDetails(pokemonList) {
