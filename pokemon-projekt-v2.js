@@ -11,6 +11,27 @@ function hideLoadingSpinner() {
     document.getElementById('loading-spinner').classList.add('d-none');
 }
 
+function searchPokemon() {
+    const searchInput = document.getElementById('search-input');
+    const searchValue = searchInput.value.toLowerCase();
+    if (searchValue.length < 3) {
+        return;
+    }
+
+    const filteredPokemon = allPokemon.filter((pokemon) => pokemon.name.includes(searchValue));
+
+    renderPokemonCards(filteredPokemon);
+
+    if (filteredPokemon.length == 0) {
+        showNotFoundMessage();
+    }
+}
+
+function showNotFoundMessage() {
+    const container = document.getElementById('pokemon-container');
+    container.innerHTML = '<li data-id="not-found">No match found.</li>';
+}
+
 async function fetchPokemonList() {
     const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
     const response = await fetch(url);
@@ -25,7 +46,7 @@ async function loadPokemonList() {
         const data = await fetchPokemonList();
         await loadPokemonDetails(data.results);
         offset += limit;
-        renderPokemonCards();
+        renderPokemonCards(allPokemon);
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
     }
@@ -43,12 +64,12 @@ async function loadPokemonDetails(pokemonList) {
     }
 }
 
-function renderPokemonCards() {
+function renderPokemonCards(pokemonList) {
     const container = document.getElementById('pokemon-container');
     container.innerHTML = '';
 
-    for (let i = 0; i < allPokemon.length; i++) {
-        container.innerHTML += getPokemonCardTemplate(allPokemon[i]);
+    for (let i = 0; i < pokemonList.length; i++) {
+        container.innerHTML += getPokemonCardTemplate(pokemonList[i]);
     }
 }
 
@@ -86,6 +107,10 @@ function getPokemonCardTemplate(pokemon) {
         </li>
     `;
 }
+
+const searchButton = document.getElementById('search-button');
+
+searchButton.addEventListener('click', searchPokemon);
 
 const loadMoreButton = document.getElementById('load-more-button');
 
