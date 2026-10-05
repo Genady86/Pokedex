@@ -30,3 +30,34 @@
 .pokemon-card img {
     width: 120px;
 }
+
+/* Dialog */
+#pokemon-dialog {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+}
+
+.pokemon-dialog-content {
+    width: 280px;
+    padding: 24px;
+    text-align: center;
+}
+
+.pokemon-dialog-content h2 {
+    text-transform: capitalize;
+}
+
+.pokemon-dialog-image {
+    width: 160px;
+}
+
+.pokemon-dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.pokemon-dialog-buttons button {
+    cursor: pointer;
+}

@@ -36,23 +36,52 @@ function getPokemonStat(pokemon, statName) {
 // HTML für den Dialog
 function getPokemonDialogTemplate(pokemon) {
     return `
+        <div class="pokemon-dialog-content">
+            ${getPokemonDialogInfo(pokemon)}
+            ${getPokemonDialogButtons()}
+        </div>
+    `;
+}
+
+// Name, Bild und Werte
+function getPokemonDialogInfo(pokemon) {
+    return `
         <h2>${pokemon.name}</h2>
 
         <img
+            class="pokemon-dialog-image"
             src="${pokemon.sprites.front_default}"
             alt="${pokemon.name}"
         >
 
+        ${getPokemonStats(pokemon)}
+    `;
+}
+
+// Pokemon Werte
+function getPokemonStats(pokemon) {
+    return `
         <p>HP: ${getPokemonStat(pokemon, 'hp')}</p>
         <p>Attack: ${getPokemonStat(pokemon, 'attack')}</p>
         <p>Defense: ${getPokemonStat(pokemon, 'defense')}</p>
+    `;
+}
 
-        <button
-            aria-label="Close Pokemon details"
-            onclick="closePokemonDialog()"
-        >
-            Close
-        </button>
+// Buttons im Dialog
+function getPokemonDialogButtons() {
+    return `
+        <div class="pokemon-dialog-buttons">
+            <button aria-label="Previous Pokemon">←</button>
+
+            <button
+                aria-label="Close Pokemon details"
+                onclick="closePokemonDialog()"
+            >
+                Close
+            </button>
+
+            <button aria-label="Next Pokemon">→</button>
+        </div>
     `;
 }
 

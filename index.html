@@ -14,6 +14,7 @@
         <header>
             <h1>Pokedex</h1>
 
+            <!-- Search -->
             <input
                 id="search-input"
                 data-id="search-input"
@@ -28,18 +29,20 @@
         </header>
 
         <main data-id="content">
+            <!-- Loading -->
             <div id="loading-spinner" class="d-none">Pokémon are loading...</div>
 
+            <!-- Pokemon cards -->
             <ul id="pokemon-container" class="pokemon-container"></ul>
 
+            <!-- Load more -->
             <button id="load-more-button" data-id="load-more-button" aria-label="Load more Pokemon">
                 Load More
             </button>
         </main>
 
-        <dialog id="pokemon-dialog" aria-label="Pokemon details">
-            <button aria-label="Close Pokemon details" onclick="closePokemonDialog()">Close</button>
-        </dialog>
+        <!-- Pokemon dialog -->
+        <dialog id="pokemon-dialog" aria-label="Pokemon details"></dialog>
 
         <script src="global-var.js"></script>
         <script src="pokemon-projekt-v2.js"></script>
