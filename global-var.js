@@ -1,5 +1,8 @@
 let allPokemon = [];
 
+// Aktuelles Pokemon im Dialog
+let currentPokemonIndex = 0;
+
 let offset = 0;
 
 const limit = 20;

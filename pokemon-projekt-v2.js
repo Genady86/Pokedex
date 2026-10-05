@@ -16,8 +16,8 @@ function hideLoadingSpinner() {
 
 // Dialog öffnen
 function openPokemonDialog(pokemonId) {
-    const pokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
-    const pokemon = allPokemon[pokemonIndex];
+    currentPokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
+    const pokemon = allPokemon[currentPokemonIndex];
 
     const dialog = document.getElementById('pokemon-dialog');
     dialog.innerHTML = getPokemonDialogTemplate(pokemon);
@@ -71,7 +71,12 @@ function getPokemonStats(pokemon) {
 function getPokemonDialogButtons() {
     return `
         <div class="pokemon-dialog-buttons">
-            <button aria-label="Previous Pokemon">←</button>
+            <button
+    aria-label="Previous Pokemon"
+    onclick="showPreviousPokemon()"
+>
+    ←
+</button>
 
             <button
                 aria-label="Close Pokemon details"
@@ -80,7 +85,12 @@ function getPokemonDialogButtons() {
                 Close
             </button>
 
-            <button aria-label="Next Pokemon">→</button>
+       <button
+    aria-label="Next Pokemon"
+    onclick="showNextPokemon()"
+>
+    →
+</button>
         </div>
     `;
 }
@@ -89,6 +99,28 @@ function getPokemonDialogButtons() {
 function closePokemonDialog() {
     const dialog = document.getElementById('pokemon-dialog');
     dialog.close();
+}
+
+// Nächstes Pokemon anzeigen
+function showNextPokemon() {
+    if (currentPokemonIndex < allPokemon.length - 1) {
+        currentPokemonIndex++;
+    }
+
+    const pokemon = allPokemon[currentPokemonIndex];
+    const dialog = document.getElementById('pokemon-dialog');
+    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
+}
+
+// Vorheriges Pokemon anzeigen
+function showPreviousPokemon() {
+    if (currentPokemonIndex > 0) {
+        currentPokemonIndex--;
+    }
+
+    const pokemon = allPokemon[currentPokemonIndex];
+    const dialog = document.getElementById('pokemon-dialog');
+    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
 }
 
 // Pokemon suchen
