@@ -1,19 +1,72 @@
+// Hintergrundfarbe der Karte
 function getTypeBackgroundColor(pokemon) {
     const type = pokemon.types[0].type.name;
     return TYPE_COLORS[type] || '#F5F5F5';
 }
 
+// Loading anzeigen
 function showLoadingSpinner() {
     document.getElementById('loading-spinner').classList.remove('d-none');
 }
 
+// Loading ausblenden
 function hideLoadingSpinner() {
     document.getElementById('loading-spinner').classList.add('d-none');
 }
 
+// Dialog öffnen
+function openPokemonDialog(pokemonId) {
+    const pokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
+    const pokemon = allPokemon[pokemonIndex];
+
+    const dialog = document.getElementById('pokemon-dialog');
+    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
+    dialog.showModal();
+}
+
+// Wert von einem Stat holen
+function getPokemonStat(pokemon, statName) {
+    for (let i = 0; i < pokemon.stats.length; i++) {
+        if (pokemon.stats[i].stat.name == statName) {
+            return pokemon.stats[i].base_stat;
+        }
+    }
+}
+
+// HTML für den Dialog
+function getPokemonDialogTemplate(pokemon) {
+    return `
+        <h2>${pokemon.name}</h2>
+
+        <img
+            src="${pokemon.sprites.front_default}"
+            alt="${pokemon.name}"
+        >
+
+        <p>HP: ${getPokemonStat(pokemon, 'hp')}</p>
+        <p>Attack: ${getPokemonStat(pokemon, 'attack')}</p>
+        <p>Defense: ${getPokemonStat(pokemon, 'defense')}</p>
+
+        <button
+            aria-label="Close Pokemon details"
+            onclick="closePokemonDialog()"
+        >
+            Close
+        </button>
+    `;
+}
+
+// Dialog schließen
+function closePokemonDialog() {
+    const dialog = document.getElementById('pokemon-dialog');
+    dialog.close();
+}
+
+// Pokemon suchen
 function searchPokemon() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase();
+
     if (searchValue.length < 3) {
         return;
     }
@@ -27,17 +80,20 @@ function searchPokemon() {
     }
 }
 
+// Meldung bei keinem Treffer
 function showNotFoundMessage() {
     const container = document.getElementById('pokemon-container');
     container.innerHTML = '<li data-id="not-found">No match found.</li>';
 }
 
+// Pokemon Liste laden
 async function fetchPokemonList() {
     const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
     const response = await fetch(url);
     return await response.json();
 }
 
+// Pokemon laden und anzeigen
 async function loadPokemonList() {
     showLoadingSpinner();
     loadMoreButton.disabled = true;
@@ -55,6 +111,7 @@ async function loadPokemonList() {
     loadMoreButton.disabled = false;
 }
 
+// Details der Pokemon laden
 async function loadPokemonDetails(pokemonList) {
     for (let i = 0; i < pokemonList.length; i++) {
         const response = await fetch(pokemonList[i].url);
@@ -64,6 +121,7 @@ async function loadPokemonDetails(pokemonList) {
     }
 }
 
+// Pokemon Karten anzeigen
 function renderPokemonCards(pokemonList) {
     const container = document.getElementById('pokemon-container');
     container.innerHTML = '';
@@ -73,6 +131,7 @@ function renderPokemonCards(pokemonList) {
     }
 }
 
+// Pokemon Typen holen
 function getPokemonTypes(pokemon) {
     let pokemonTypes = '';
 
@@ -83,6 +142,7 @@ function getPokemonTypes(pokemon) {
     return pokemonTypes;
 }
 
+// HTML für eine Pokemon Karte
 function getPokemonCardTemplate(pokemon) {
     const backgroundColor = getTypeBackgroundColor(pokemon);
 
@@ -93,7 +153,8 @@ function getPokemonCardTemplate(pokemon) {
                 data-id="card"
                 style="background-color: ${backgroundColor}"
                 aria-label="Open ${pokemon.name}"
-            >
+                onclick="openPokemonDialog(${pokemon.id})"
+                >
                 <h2>${pokemon.name}</h2>
                 <p>#${pokemon.id}</p>
                 <p>${getPokemonTypes(pokemon)}</p>
@@ -108,12 +169,13 @@ function getPokemonCardTemplate(pokemon) {
     `;
 }
 
+// Search Button
 const searchButton = document.getElementById('search-button');
-
 searchButton.addEventListener('click', searchPokemon);
 
+// Load More Button
 const loadMoreButton = document.getElementById('load-more-button');
-
 loadMoreButton.addEventListener('click', loadPokemonList);
 
+// Erste Pokemon laden
 loadPokemonList();
