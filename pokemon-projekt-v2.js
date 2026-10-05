@@ -22,6 +22,8 @@ function openPokemonDialog(pokemonId) {
     const dialog = document.getElementById('pokemon-dialog');
     dialog.innerHTML = getPokemonDialogTemplate(pokemon);
     dialog.showModal();
+
+    document.body.classList.add('no-scroll');
 }
 
 // Wert von einem Stat holen
@@ -99,6 +101,17 @@ function getPokemonDialogButtons() {
 function closePokemonDialog() {
     const dialog = document.getElementById('pokemon-dialog');
     dialog.close();
+
+    document.body.classList.remove('no-scroll');
+}
+
+// Dialog beim Klick daneben schließen
+function closeDialogOnOutside(event) {
+    const dialog = document.getElementById('pokemon-dialog');
+
+    if (event.target == dialog) {
+        closePokemonDialog();
+    }
 }
 
 // Nächstes Pokemon anzeigen

@@ -61,3 +61,8 @@
 .pokemon-dialog-buttons button {
     cursor: pointer;
 }
+
+/* Hintergrund nicht scrollen */
+.no-scroll {
+    overflow: hidden;
+}

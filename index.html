@@ -42,7 +42,11 @@
         </main>
 
         <!-- Pokemon dialog -->
-        <dialog id="pokemon-dialog" aria-label="Pokemon details"></dialog>
+        <dialog
+            id="pokemon-dialog"
+            aria-label="Pokemon details"
+            onclick="closeDialogOnOutside(event)"
+        ></dialog>
 
         <script src="global-var.js"></script>
         <script src="pokemon-projekt-v2.js"></script>
