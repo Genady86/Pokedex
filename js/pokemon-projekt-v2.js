@@ -28,8 +28,17 @@ function showNotFoundMessage() {
     container.innerHTML = '<li data-id="not-found">No match found.</li>';
 }
 
+// Search Button aktivieren
+function updateSearchButton() {
+    const searchInput = document.getElementById('search-input');
+    searchButton.disabled = searchInput.value.length < 3;
+}
+
 // Search Button
 const searchButton = document.getElementById('search-button');
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', updateSearchButton);
 searchButton.addEventListener('click', searchPokemon);
 
 // Load More Button
