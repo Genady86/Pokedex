@@ -40,8 +40,10 @@
 
 .pokemon-dialog-content {
     width: 280px;
+    max-width: calc(100vw - 20px);
     padding: 24px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .pokemon-dialog-content h2 {
@@ -65,4 +67,23 @@
 /* Hintergrund nicht scrollen */
 .no-scroll {
     overflow: hidden;
+}
+
+/* Maximale Breite */
+main {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* Kleine Bildschirme */
+@media (max-width: 320px) {
+    .pokemon-container {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .pokemon-dialog-content {
+        width: calc(100vw - 20px);
+        padding: 16px;
+    }
 }
