@@ -1,0 +1,37 @@
+/* Dark Mode */
+.dark-mode {
+    background-color: #161b26;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(42, 117, 187, 0.12) 0, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(255, 203, 5, 0.08) 0, transparent 25%);
+    color: white;
+}
+
+.dark-mode header {
+    background-color: #222938;
+}
+
+.dark-mode .header-title h1 {
+    color: white;
+}
+
+.dark-mode #pokemon-dialog {
+    background-color: #222938;
+    color: white;
+}
+
+.dark-mode .pokemon-dialog-content {
+    background-color: #222938;
+}
+
+.dark-mode .pokemon-dialog-content h2 {
+    color: white;
+}
+
+.dark-mode .pokemon-dialog-content::before {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .pokemon-dialog-content::after {
+    background-color: rgba(255, 255, 255, 0.08);
+}

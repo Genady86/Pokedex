@@ -1,0 +1,86 @@
+/* Dialog */
+#pokemon-dialog {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+#pokemon-dialog::backdrop {
+    background: rgba(16, 24, 40, 0.6);
+}
+
+.pokemon-dialog-content {
+    position: relative;
+    width: 340px;
+    max-width: calc(100vw - 20px);
+    padding: 28px;
+    text-align: center;
+    background-color: white;
+}
+
+.pokemon-dialog-content h2 {
+    margin-top: 0;
+    text-transform: capitalize;
+    color: #263d7a;
+}
+
+.pokemon-dialog-content::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    border: 18px solid rgba(42, 117, 187, 0.08);
+    border-radius: 50%;
+}
+
+.pokemon-dialog-content::after {
+    content: '';
+    position: absolute;
+    top: 78px;
+    right: 20px;
+    width: 140px;
+    height: 24px;
+    background-color: rgba(42, 117, 187, 0.08);
+}
+
+.pokemon-dialog-content h2,
+.pokemon-dialog-image,
+.pokemon-dialog-content p,
+.pokemon-dialog-buttons {
+    position: relative;
+    z-index: 1;
+}
+
+.pokemon-dialog-image {
+    width: 210px;
+    height: 210px;
+    object-fit: contain;
+}
+
+.pokemon-dialog-content p {
+    margin: 10px 0;
+}
+
+.pokemon-dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.pokemon-dialog-buttons button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffcb05;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pokemon-dialog-buttons button:hover {
+    transform: translateY(-2px);
+}

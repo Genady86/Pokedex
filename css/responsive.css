@@ -1,0 +1,37 @@
+/* Kleine Bildschirme */
+@media (max-width: 320px) {
+    header {
+        padding: 12px;
+    }
+
+    .header-title {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+    }
+
+    #search-input {
+        width: 170px;
+    }
+
+    .pokemon-container {
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .pokemon-card {
+        width: 230px;
+        min-height: 230px;
+    }
+
+    .pokemon-card img {
+        width: 120px;
+        height: 120px;
+        margin-top: 0;
+    }
+
+    .pokemon-dialog-content {
+        width: calc(100vw - 20px);
+        padding: 16px;
+    }
+}

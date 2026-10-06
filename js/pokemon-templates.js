@@ -7,11 +7,10 @@ function getTypeBackgroundColor(pokemon) {
 // Pokemon Typen holen
 function getPokemonTypes(pokemon) {
     let pokemonTypes = '';
-
     for (let i = 0; i < pokemon.types.length; i++) {
-        pokemonTypes += pokemon.types[i].type.name + ' ';
+        const type = pokemon.types[i].type.name;
+        pokemonTypes += `<span class="type-badge">${type}</span>`;
     }
-
     return pokemonTypes;
 }
 
@@ -128,7 +127,9 @@ function getPokemonCardContent(pokemon) {
     return `
         <h2>${pokemon.name}</h2>
         <p>#${pokemon.id}</p>
-        <p>${getPokemonTypes(pokemon)}</p>
+       <div class="pokemon-types">
+    ${getPokemonTypes(pokemon)}
+</div>
         ${getPokemonCardImage(pokemon)}
     `;
 }
