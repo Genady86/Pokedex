@@ -178,14 +178,11 @@ async function showPreviousPokemon() {
 function searchPokemon() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase();
-
     if (searchValue.length < 3) {
         return;
     }
-
     const filteredPokemon = allPokemon.filter((pokemon) => pokemon.name.includes(searchValue));
     renderPokemonCards(filteredPokemon);
-
     if (filteredPokemon.length == 0) {
         showNotFoundMessage();
     }
@@ -208,7 +205,6 @@ async function fetchPokemonList() {
 async function loadPokemonList() {
     showLoadingSpinner();
     loadMoreButton.disabled = true;
-
     try {
         const data = await fetchPokemonList();
         await loadPokemonDetails(data.results);
@@ -217,7 +213,6 @@ async function loadPokemonList() {
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
     }
-
     finishLoading();
 }
 
