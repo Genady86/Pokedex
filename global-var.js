@@ -3,6 +3,9 @@ let allPokemon = [];
 // Aktuelles Pokemon im Dialog
 let currentPokemonIndex = 0;
 
+// Geladene Evolution Chains
+let evolutionCache = {};
+
 let offset = 0;
 
 const limit = 20;

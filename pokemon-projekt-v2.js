@@ -20,15 +20,38 @@ function finishLoading() {
     loadMoreButton.disabled = false;
 }
 
-// Dialog öffnen
-function openPokemonDialog(pokemonId) {
-    currentPokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
+// Evolution Chain laden
+async function loadEvolutionChain(pokemon) {
+    if (evolutionCache[pokemon.id]) {
+        return evolutionCache[pokemon.id];
+    }
+
+    const speciesResponse = await fetch(pokemon.species.url);
+    const speciesData = await speciesResponse.json();
+    const evolutionResponse = await fetch(speciesData.evolution_chain.url);
+    const evolutionData = await evolutionResponse.json();
+
+    evolutionCache[pokemon.id] = evolutionData;
+    return evolutionData;
+}
+
+// Dialog aktualisieren
+async function updatePokemonDialog() {
     const pokemon = allPokemon[currentPokemonIndex];
+    const evolutionData = await loadEvolutionChain(pokemon);
+    const dialog = document.getElementById('pokemon-dialog');
+
+    dialog.innerHTML = getPokemonDialogTemplate(pokemon, evolutionData);
+}
+
+// Dialog öffnen
+async function openPokemonDialog(pokemonId) {
+    currentPokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
+
+    await updatePokemonDialog();
 
     const dialog = document.getElementById('pokemon-dialog');
-    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
     dialog.showModal();
-
     document.body.classList.add('no-scroll');
 }
 
@@ -42,27 +65,26 @@ function getPokemonStat(pokemon, statName) {
 }
 
 // HTML für den Dialog
-function getPokemonDialogTemplate(pokemon) {
+function getPokemonDialogTemplate(pokemon, evolutionData) {
     return `
         <div class="pokemon-dialog-content">
-            ${getPokemonDialogInfo(pokemon)}
+            ${getPokemonDialogInfo(pokemon, evolutionData)}
             ${getPokemonDialogButtons()}
         </div>
     `;
 }
 
 // Name, Bild und Werte
-function getPokemonDialogInfo(pokemon) {
+function getPokemonDialogInfo(pokemon, evolutionData) {
     return `
         <h2>${pokemon.name}</h2>
-
         <img
             class="pokemon-dialog-image"
             src="${pokemon.sprites.front_default}"
             alt="${pokemon.name}"
         >
-
         ${getPokemonStats(pokemon)}
+        ${getEvolutionTemplate(evolutionData)}
     `;
 }
 
@@ -73,6 +95,38 @@ function getPokemonStats(pokemon) {
         <p>Attack: ${getPokemonStat(pokemon, 'attack')}</p>
         <p>Defense: ${getPokemonStat(pokemon, 'defense')}</p>
     `;
+}
+
+// Evolution anzeigen
+function getEvolutionTemplate(evolutionData) {
+    return `
+        <p>Evolution: ${getEvolutionNames(evolutionData)}</p>
+    `;
+}
+
+// Namen der Evolutionen holen
+function getEvolutionNames(evolutionData) {
+    const chain = evolutionData.chain;
+    let names = chain.species.name;
+
+    for (let i = 0; i < chain.evolves_to.length; i++) {
+        const evolution = chain.evolves_to[i];
+        names += ' > ' + evolution.species.name;
+        names += getNextEvolutionNames(evolution.evolves_to);
+    }
+
+    return names;
+}
+
+// Weitere Evolutionen holen
+function getNextEvolutionNames(evolutionList) {
+    let names = '';
+
+    for (let i = 0; i < evolutionList.length; i++) {
+        names += ' > ' + evolutionList[i].species.name;
+    }
+
+    return names;
 }
 
 // Buttons im Dialog
@@ -90,7 +144,6 @@ function getPokemonDialogButtons() {
 function closePokemonDialog() {
     const dialog = document.getElementById('pokemon-dialog');
     dialog.close();
-
     document.body.classList.remove('no-scroll');
 }
 
@@ -104,36 +157,35 @@ function closeDialogOnOutside(event) {
 }
 
 // Nächstes Pokemon anzeigen
-function showNextPokemon() {
+async function showNextPokemon() {
     if (currentPokemonIndex < allPokemon.length - 1) {
         currentPokemonIndex++;
     }
 
-    const pokemon = allPokemon[currentPokemonIndex];
-    const dialog = document.getElementById('pokemon-dialog');
-    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
+    await updatePokemonDialog();
 }
 
 // Vorheriges Pokemon anzeigen
-function showPreviousPokemon() {
+async function showPreviousPokemon() {
     if (currentPokemonIndex > 0) {
         currentPokemonIndex--;
     }
 
-    const pokemon = allPokemon[currentPokemonIndex];
-    const dialog = document.getElementById('pokemon-dialog');
-    dialog.innerHTML = getPokemonDialogTemplate(pokemon);
+    await updatePokemonDialog();
 }
 
 // Pokemon suchen
 function searchPokemon() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase();
+
     if (searchValue.length < 3) {
         return;
     }
+
     const filteredPokemon = allPokemon.filter((pokemon) => pokemon.name.includes(searchValue));
     renderPokemonCards(filteredPokemon);
+
     if (filteredPokemon.length == 0) {
         showNotFoundMessage();
     }
@@ -156,6 +208,7 @@ async function fetchPokemonList() {
 async function loadPokemonList() {
     showLoadingSpinner();
     loadMoreButton.disabled = true;
+
     try {
         const data = await fetchPokemonList();
         await loadPokemonDetails(data.results);
@@ -164,6 +217,7 @@ async function loadPokemonList() {
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
     }
+
     finishLoading();
 }
 
@@ -204,24 +258,41 @@ function getPokemonCardTemplate(pokemon) {
 
     return `
         <li>
-            <button
-                class="pokemon-card"
-                data-id="card"
-                style="background-color: ${backgroundColor}"
-                aria-label="Open ${pokemon.name}"
-                onclick="openPokemonDialog(${pokemon.id})"
-                >
-                <h2>${pokemon.name}</h2>
-                <p>#${pokemon.id}</p>
-                <p>${getPokemonTypes(pokemon)}</p>
-
-                <img
-                    src="${pokemon.sprites.front_default}"
-                    alt="${pokemon.name}"
-                    data-id="card-image"
-                >
-            </button>
+            ${getPokemonCardButton(pokemon, backgroundColor)}
         </li>
+    `;
+}
+
+// Button der Pokemon Karte
+function getPokemonCardButton(pokemon, backgroundColor) {
+    return `
+        <button class="pokemon-card" data-id="card"
+            style="background-color: ${backgroundColor}"
+            aria-label="Open ${pokemon.name}"
+            onclick="openPokemonDialog(${pokemon.id})">
+            ${getPokemonCardContent(pokemon)}
+        </button>
+    `;
+}
+
+// Inhalt der Pokemon Karte
+function getPokemonCardContent(pokemon) {
+    return `
+        <h2>${pokemon.name}</h2>
+        <p>#${pokemon.id}</p>
+        <p>${getPokemonTypes(pokemon)}</p>
+        ${getPokemonCardImage(pokemon)}
+    `;
+}
+
+// Bild der Pokemon Karte
+function getPokemonCardImage(pokemon) {
+    return `
+        <img
+            src="${pokemon.sprites.front_default}"
+            alt="${pokemon.name}"
+            data-id="card-image"
+        >
     `;
 }
 
