@@ -14,6 +14,12 @@ function hideLoadingSpinner() {
     document.getElementById('loading-spinner').classList.add('d-none');
 }
 
+// Laden beenden
+function finishLoading() {
+    hideLoadingSpinner();
+    loadMoreButton.disabled = false;
+}
+
 // Dialog öffnen
 function openPokemonDialog(pokemonId) {
     currentPokemonIndex = allPokemon.findIndex((pokemon) => pokemon.id == pokemonId);
@@ -73,26 +79,9 @@ function getPokemonStats(pokemon) {
 function getPokemonDialogButtons() {
     return `
         <div class="pokemon-dialog-buttons">
-            <button
-    aria-label="Previous Pokemon"
-    onclick="showPreviousPokemon()"
->
-    ←
-</button>
-
-            <button
-                aria-label="Close Pokemon details"
-                onclick="closePokemonDialog()"
-            >
-                Close
-            </button>
-
-       <button
-    aria-label="Next Pokemon"
-    onclick="showNextPokemon()"
->
-    →
-</button>
+            <button aria-label="Previous Pokemon" onclick="showPreviousPokemon()">←</button>
+            <button aria-label="Close Pokemon details" onclick="closePokemonDialog()">Close</button>
+            <button aria-label="Next Pokemon" onclick="showNextPokemon()">→</button>
         </div>
     `;
 }
@@ -140,15 +129,11 @@ function showPreviousPokemon() {
 function searchPokemon() {
     const searchInput = document.getElementById('search-input');
     const searchValue = searchInput.value.toLowerCase();
-
     if (searchValue.length < 3) {
         return;
     }
-
     const filteredPokemon = allPokemon.filter((pokemon) => pokemon.name.includes(searchValue));
-
     renderPokemonCards(filteredPokemon);
-
     if (filteredPokemon.length == 0) {
         showNotFoundMessage();
     }
@@ -171,7 +156,6 @@ async function fetchPokemonList() {
 async function loadPokemonList() {
     showLoadingSpinner();
     loadMoreButton.disabled = true;
-
     try {
         const data = await fetchPokemonList();
         await loadPokemonDetails(data.results);
@@ -180,9 +164,7 @@ async function loadPokemonList() {
     } catch (error) {
         console.error('Pokemon could not be loaded:', error);
     }
-
-    hideLoadingSpinner();
-    loadMoreButton.disabled = false;
+    finishLoading();
 }
 
 // Details der Pokemon laden
