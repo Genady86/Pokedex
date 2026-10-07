@@ -35,11 +35,18 @@
         </header>
 
         <main data-id="content">
-            <!-- Loading -->
-            <div id="loading-spinner" class="d-none">Pokémon are loading...</div>
-
             <!-- Pokemon cards -->
             <ul id="pokemon-container" class="pokemon-container"></ul>
+
+            <!-- Loading -->
+            <div id="loading-spinner" class="d-none" role="status" aria-live="polite">
+                <div class="loading-box">
+                    <div class="pokeball-loader">
+                        <div class="pokeball-center"></div>
+                    </div>
+                    <p>Pokémon are loading...</p>
+                </div>
+            </div>
 
             <!-- Load more -->
             <button id="load-more-button" data-id="load-more-button" aria-label="Load more Pokemon">

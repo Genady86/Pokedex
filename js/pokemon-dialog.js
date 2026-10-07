@@ -37,6 +37,8 @@ function closeDialogOnOutside(event) {
 async function showNextPokemon() {
     if (currentPokemonIndex < allPokemon.length - 1) {
         currentPokemonIndex++;
+    } else {
+        currentPokemonIndex = 0;
     }
 
     await updatePokemonDialog();
@@ -46,6 +48,8 @@ async function showNextPokemon() {
 async function showPreviousPokemon() {
     if (currentPokemonIndex > 0) {
         currentPokemonIndex--;
+    } else {
+        currentPokemonIndex = allPokemon.length - 1;
     }
 
     await updatePokemonDialog();
